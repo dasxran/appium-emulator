@@ -62,8 +62,8 @@ ENV SDK_VERSION=$SDK_VERSION \
 
 RUN wget -O tools.zip https://dl.google.com/android/repository/${SDK_VERSION}.zip && \
     unzip tools.zip && rm tools.zip && \
-    chmod a+x -R $ANDROID_HOME && \
-    chown -R root:root $ANDROID_HOME
+    chmod a+x -R $ANDROID_HOME/tools && \
+    chown -R root:root $ANDROID_HOME/tools
 
 ENV PATH=$PATH:$ANDROID_HOME/tools:$ANDROID_HOME/tools/bin
 
@@ -71,8 +71,8 @@ ENV PATH=$PATH:$ANDROID_HOME/tools:$ANDROID_HOME/tools/bin
 RUN mkdir -p ~/.android && \
     touch ~/.android/repositories.cfg && \
     echo y | sdkmanager "platform-tools" && \
-    echo y | sdkmanager "build-tools;$ANDROID_BUILD_TOOLS_VERSION" && \
-    echo y | sdkmanager "platforms;$ANDROID_PLATFORM_VERSION"
+    echo y | sdkmanager "build-tools;$ANDROID_BUILD_TOOLS_VERSION"
+    # echo y | sdkmanager "platforms;$ANDROID_PLATFORM_VERSION"
 
 ENV PATH=$PATH:$ANDROID_HOME/platform-tools:$ANDROID_HOME/build-tools
 
@@ -108,6 +108,7 @@ RUN echo "${TZ}" > /etc/timezone
 EXPOSE 4723
 
 #========================================
-# Run appium server
+# Launch emulator and appium server
 #========================================
-CMD appium
+RUN appium
+CMD /android/sdk/launch-emulator.sh
