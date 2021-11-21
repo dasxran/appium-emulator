@@ -107,8 +107,17 @@ RUN echo "${TZ}" > /etc/timezone
 #===============
 EXPOSE 4723
 
+#====================================================
+# Scripts to run appium
+#====================================================
+COPY launch-appium.sh \
+     launch-emulator.sh \
+     /android/sdk/
+
+RUN chmod +x /android/sdk/launch-appium.sh && \
+    chmod +x /android/sdk/launch-emulator.sh
+
 #========================================
 # Launch emulator and appium server
 #========================================
-RUN appium
-CMD /android/sdk/launch-emulator.sh
+CMD /android/sdk/launch-emulator.sh && /android/sdk/launch-appium.sh
