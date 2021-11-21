@@ -111,13 +111,11 @@ EXPOSE 4723
 # Scripts to run appium
 #====================================================
 COPY launch-appium.sh \
-     launch-emulator.sh \
      /android/sdk/
 
-RUN chmod +x /android/sdk/launch-appium.sh && \
-    chmod +x /android/sdk/launch-emulator.sh
+RUN chmod +x /android/sdk/launch-appium.sh
 
 #========================================
 # Launch emulator and appium server
 #========================================
-CMD /android/sdk/launch-emulator.sh && /android/sdk/launch-appium.sh
+CMD /android/sdk/launch-appium.sh && /android/sdk/launch-emulator.sh

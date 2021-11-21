@@ -16,4 +16,4 @@ if [ "$ADB_SHELL" = true ]; then
     CMD+=" --allow-insecure adb_shell"
 fi
 
-$CMD
+nohup $CMD &
