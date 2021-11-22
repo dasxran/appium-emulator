@@ -3,32 +3,35 @@ Documentation  Simple example using AppiumLibrary
 Library  AppiumLibrary
 
 *** Variables ***
+${APPIUM_SERVER}              http://172.17.0.3:4723/wd/hub
 ${ANDROID_AUTOMATION_NAME}    UIAutomator2
 ${ANDROID_PLATFORM_NAME}      Android
-${ANDROID_PLATFORM_VERSION}   %{ANDROID_PLATFORM_VERSION=9}
+${AppPackage}                 com.google.android.dialer
 
 *** Test Cases ***
-Should send keys to search box and then check the value
-  Open Test Application
-  Input Search Query  Hello World!
-  Submit Search
-  Search Query Should Be Matching  Hello World!
+Place a Phone Call using Dialer
+  [Tags]    Dialer
+  Open Dialer Application
+  Dial Phone Number    555-555-5555
+  [Teardown]    Close Application
 
 
 *** Keywords ***
-Open Test Application
-  Open Application  http://172.17.0.3:4723/wd/hub  automationName=${ANDROID_AUTOMATION_NAME}
-  ...  platformName=${ANDROID_PLATFORM_NAME}  platformVersion=${ANDROID_PLATFORM_VERSION}
-  ...  appPackage=io.appium.android.apis  appActivity=.app.SearchInvoke
+Open Dialer Application
+  Open Application  ${APPIUM_SERVER}  automationName=${ANDROID_AUTOMATION_NAME}
+  ...  platformName=${ANDROID_PLATFORM_NAME}
+  ...  appPackage=${AppPackage}  appActivity=com.android.dialer.main.impl.MainActivity
 
-Input Search Query
-  [Arguments]  ${query}
-  Input Text  txt_query_prefill  ${query}
-
-Submit Search
-  Click Element  btn_start_search
-
-Search Query Should Be Matching
-  [Arguments]  ${text}
-  Wait Until Page Contains Element  android:id/search_src_text
-  Element Text Should Be  android:id/search_src_text  ${text}
+Dial Phone Number
+  [Arguments]  ${number}
+  Wait Until Page Contains Element      id=${AppPackage}:id/fab
+  Click Element                         id=${AppPackage}:id/fab
+  Wait Until Page Contains Element      id=${AppPackage}:id/digits
+  Click Element                         id=${AppPackage}:id/digits
+  Input Text                            id=${AppPackage}:id/digits        ${number}
+  Click Element                         id=${AppPackage}:id/dialpad_floating_action_button
+  Wait Until Page Contains Element      id=${AppPackage}:id/incall_end_call
+  Sleep                                 10s
+  Capture Page Screenshot
+  Click Element                         id=${AppPackage}:id/incall_end_call
+  Wait Until Page Contains Element      id=${AppPackage}:id/fab
