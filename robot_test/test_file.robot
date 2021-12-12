@@ -3,7 +3,7 @@ Documentation  Simple example using AppiumLibrary
 Library  AppiumLibrary
 
 *** Variables ***
-${APPIUM_SERVER}              http://172.17.0.3:4723/wd/hub
+${APPIUM_SERVER}              http://127.0.0.1:4723/wd/hub
 ${ANDROID_AUTOMATION_NAME}    UIAutomator2
 ${ANDROID_PLATFORM_NAME}      Android
 ${AppPackage}                 com.google.android.dialer
